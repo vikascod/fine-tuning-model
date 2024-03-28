@@ -195,4 +195,64 @@
                     END AS column2 \
                     FROM dataset;"
   }
-                                                                                                         
+  {
+    "input_text": "Identify influential nodes in a social network using PageRank algorithm.",
+    "output_text": "SELECT node_id, PageRank(node_id) AS pagerank_score \
+                    FROM social_network_graph \
+                    ORDER BY pagerank_score DESC;"
+  }
+  {
+    "input_text": "Forecast future values of a time series using ARIMA model.",
+    "output_text": "SELECT date, value, \
+                    FORECAST_ARIMA(value) AS forecasted_value \
+                    FROM time_series_data;"
+  }
+  {
+    "input_text": "Determine which points fall within a polygon boundary.",
+    "output_text": "SELECT point_id, point_location \
+                    FROM spatial_data \
+                    WHERE ST_Within(point_location, polygon_boundary);"
+  }
+  {
+    "input_text": "Identify periodic patterns in time series data using Fourier transform.",
+    "output_text": "SELECT timestamp, value, \
+                    FOURIER_TRANSFORM(value) AS frequency_domain_signal \
+                    FROM time_series_data;"
+  }
+  {
+    "input_text": "Generate word embeddings for text data using Word2Vec model.",
+    "output_text": "SELECT text_column, WORD2VEC(text_column) AS word_embeddings \
+                    FROM text_data;"
+  }
+  {
+    "input_text": "Build a random forest classifier model to predict customer churn.",
+    "output_text": "SELECT * \
+                    FROM random_forest_model \
+                    WHERE predicted_churn_probability > 0.5;"
+  }
+  {
+    "input_text": "Identify association rules between products in transaction data.",
+    "output_text": "SELECT antecedent, consequent, confidence \
+                    FROM association_rules \
+                    WHERE confidence > 0.8;"
+  }
+  {
+    "input_text": "Decompose time series data into seasonal, trend, and residual components.",
+    "output_text": "SELECT date, value, \
+                    STT_DECOMP(value) AS decomposition \
+                    FROM time_series_data;"
+  }
+  {
+    "input_text": "Analyze customer retention and engagement patterns using cohort analysis.",
+    "output_text": "SELECT cohort_start_date, cohort_period, \
+                    COUNT(DISTINCT customer_id) AS num_customers \
+                    FROM cohort_analysis_data \
+                    GROUP BY cohort_start_date, cohort_period;"
+  }
+  {
+    "input_text": "Impute missing values in multiple columns using multivariate imputation.",
+    "output_text": "SELECT column1, column2, \
+                    MULTIVARIATE_IMPUTE(column1, column2) AS imputed_value \
+                    FROM dataset;"
+  }
+                    

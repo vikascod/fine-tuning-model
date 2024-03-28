@@ -662,4 +662,13 @@
                     FROM words_table \
                     WHERE LEVENSHTEIN(word, 'correct_word') <= 2;"
   }
-   
+  {"input_text": "Find all restaurants within 5 kilometers of a given latitude and longitude.", "output_text": "SELECT * FROM restaurants WHERE ST_Distance(location, ST_GeogPoint(latitude, longitude)) < 5000;"}
+  {"input_text": "Show all orders placed in the last 30 days.", "output_text": "SELECT * FROM orders WHERE order_date >= DATE_SUB(CURRENT_DATE(), INTERVAL 30 DAY);"}
+  {"input_text": "Calculate the total revenue for each product category.", "output_text": "SELECT category, SUM(revenue) AS total_revenue FROM products GROUP BY category;"}
+  {"input_text": "Retrieve the hierarchical structure of an organization from the employee table.", "output_text": "WITH RECURSIVE org_structure AS ( SELECT employee_id, name, manager_id FROM employees WHERE manager_id IS NULL UNION ALL SELECT e.employee_id, e.name, e.manager_id FROM employees e JOIN org_structure o ON e.manager_id = o.employee_id ) SELECT * FROM org_structure;"}
+  {"input_text": "Rank customers based on their total purchase amount.", "output_text": "SELECT customer_id, total_purchase_amount, RANK() OVER (ORDER BY total_purchase_amount DESC) AS purchase_rank FROM (SELECT customer_id, SUM(purchase_amount) AS total_purchase_amount FROM purchases GROUP BY customer_id) AS customer_purchases;"}
+  {"input_text": "Get all possible combinations of products and customers.", "output_text": "SELECT * FROM products CROSS JOIN customers;"}
+  {"input_text": "Find all employees who have the same manager as 'John'.", "output_text": "SELECT * FROM employees WHERE manager_id = (SELECT manager_id FROM employees WHERE name = 'John');"}
+  {"input_text": "Pivot sales data to show total sales for each product in different months.", "output_text": "SELECT * FROM (SELECT product_id, MONTH(order_date) AS month, SUM(quantity * unit_price) AS total_sales FROM sales GROUP BY product_id, MONTH(order_date)) AS sales_pivot PIVOT (SUM(total_sales) FOR month IN (1 AS Jan, 2 AS Feb, 3 AS Mar, ...)) AS sales_by_month;"}
+  {"input_text": "Classify customers based on their total purchase amount.", "output_text": "SELECT customer_id, total_purchase_amount, CASE WHEN total_purchase_amount < 1000 THEN 'Low' WHEN total_purchase_amount >= 1000 AND total_purchase_amount < 5000 THEN 'Medium' ELSE 'High' END AS purchase_category FROM (SELECT customer_id, SUM(purchase_amount) AS total_purchase_amount FROM purchases GROUP BY customer_id) AS customer_purchases;"}
+  {"input_text": "Find an approximate count of distinct customers.", "output_text": "SELECT COUNT(DISTINCT customer_id) FROM customers APPROXIMATE AT 99.9 PERCENT CONFIDENCE;"}

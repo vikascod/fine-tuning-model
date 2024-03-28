@@ -103,13 +103,180 @@
 {"input_text": "Perform ANOVA analysis on DataFrame 'df' to compare means across multiple groups using 'numeric_col' as the dependent variable and 'category_col' as the independent variable.", "output_text": "anova_results = stats.f_oneway(*[group['numeric_col'] for name, group in df.groupby('category_col')])"}
 {"input_text": "Conduct spatial analysis on DataFrame 'df' to identify spatial clusters using DBSCAN (Density-Based Spatial Clustering of Applications with Noise).", "output_text": "spatial_clusters = DBSCAN(eps=0.1, min_samples=5).fit(df[['latitude', 'longitude']])"}
 {"input_text": "Perform model evaluation on DataFrame 'df' using cross-validation to assess the performance of a classifier.", "output_text": "evaluation_metrics = cross_val_score(classifier, df.drop('target', axis=1), df['target'], cv=5, scoring='accuracy')"}
-{"input_text": "Find all restaurants within 5 kilometers of a given latitude and longitude.", "output_text": "SELECT * FROM restaurants WHERE ST_Distance(location, ST_GeogPoint(latitude, longitude)) < 5000;"}
-{"input_text": "Show all orders placed in the last 30 days.", "output_text": "SELECT * FROM orders WHERE order_date >= DATE_SUB(CURRENT_DATE(), INTERVAL 30 DAY);"}
-{"input_text": "Calculate the total revenue for each product category.", "output_text": "SELECT category, SUM(revenue) AS total_revenue FROM products GROUP BY category;"}
-{"input_text": "Retrieve the hierarchical structure of an organization from the employee table.", "output_text": "WITH RECURSIVE org_structure AS ( SELECT employee_id, name, manager_id FROM employees WHERE manager_id IS NULL UNION ALL SELECT e.employee_id, e.name, e.manager_id FROM employees e JOIN org_structure o ON e.manager_id = o.employee_id ) SELECT * FROM org_structure;"}
-{"input_text": "Rank customers based on their total purchase amount.", "output_text": "SELECT customer_id, total_purchase_amount, RANK() OVER (ORDER BY total_purchase_amount DESC) AS purchase_rank FROM (SELECT customer_id, SUM(purchase_amount) AS total_purchase_amount FROM purchases GROUP BY customer_id) AS customer_purchases;"}
-{"input_text": "Get all possible combinations of products and customers.", "output_text": "SELECT * FROM products CROSS JOIN customers;"}
-{"input_text": "Find all employees who have the same manager as 'John'.", "output_text": "SELECT * FROM employees WHERE manager_id = (SELECT manager_id FROM employees WHERE name = 'John');"}
-{"input_text": "Pivot sales data to show total sales for each product in different months.", "output_text": "SELECT * FROM (SELECT product_id, MONTH(order_date) AS month, SUM(quantity * unit_price) AS total_sales FROM sales GROUP BY product_id, MONTH(order_date)) AS sales_pivot PIVOT (SUM(total_sales) FOR month IN (1 AS Jan, 2 AS Feb, 3 AS Mar, ...)) AS sales_by_month;"}
-{"input_text": "Classify customers based on their total purchase amount.", "output_text": "SELECT customer_id, total_purchase_amount, CASE WHEN total_purchase_amount < 1000 THEN 'Low' WHEN total_purchase_amount >= 1000 AND total_purchase_amount < 5000 THEN 'Medium' ELSE 'High' END AS purchase_category FROM (SELECT customer_id, SUM(purchase_amount) AS total_purchase_amount FROM purchases GROUP BY customer_id) AS customer_purchases;"}
-{"input_text": "Find an approximate count of distinct customers.", "output_text": "SELECT COUNT(DISTINCT customer_id) FROM customers APPROXIMATE AT 99.9 PERCENT CONFIDENCE;"}
+{
+    "input_text": "Rank employees within each department based on their salary.",
+    "output_text": "val windowSpec = Window.partitionBy('department').orderBy('salary')
+                    val rankedEmployees = df.withColumn('rank', rank().over(windowSpec))"
+  }
+  {
+    "input_text": "Extract specific fields from nested JSON data.",
+    "output_text": "val extractedData = df.select('field1', 'field2.nested_field1', 'field2.nested_field2')"
+  }
+  {
+    "input_text": "Filter data for a specific date range.",
+    "output_text": "val filteredData = df.filter(col('date_column').between('2022-01-01', '2022-12-31'))"
+  }
+  {
+    "input_text": "Compute the 7-day moving average of stock prices for each stock.",
+    "output_text": "val windowSpec = Window.partitionBy('stock_symbol').orderBy('trade_date').rowsBetween(-6, 0)
+                    val movingAvg = df.withColumn('moving_avg', avg('stock_price').over(windowSpec))"
+  }
+  {
+    "input_text": "Fill missing values in a column with the mean value.",
+    "output_text": "val imputedData = df.withColumn('filled_column', when(col('column').isNull, mean('column').over(Window.partitionBy())).otherwise(col('column')))"
+  }
+  {
+    "input_text": "Pivot data to transform rows into columns based on a categorical column.",
+    "output_text": "val pivotedData = df.groupBy('category_column').pivot('pivot_column').agg(sum('value_column'))"
+  }
+  {
+    "input_text": "Extract fields from a struct within a DataFrame.",
+    "output_text": "val extractedFields = df.select('struct_column.field1', 'struct_column.field2')"
+  }
+  {
+    "input_text": "Tokenize text data and perform word count.",
+    "output_text": "val tokenizedData = df.withColumn('words', split('text_column', ' ')).select(explode('words').alias('word')).groupBy('word').count()"
+  }
+  {
+    "input_text": "Join two DataFrames based on a common key.",
+    "output_text": "val joinedData = df1.join(df2, df1('common_key') === df2('common_key'))"
+  }
+  {
+    "input_text": "Explode nested arrays into separate rows.",
+    "output_text": "val explodedData = df.withColumn('exploded_array', explode('nested_array_column'))"
+  }
+  {
+    "input_text": "Aggregate streaming data over a sliding window of 1 hour.",
+    "output_text": "val windowedAggregation = streamingDF
+                      .groupBy(window($'timestamp', '1 hour'))
+                      .agg(count('*').alias('count'))"
+  }
+  {
+    "input_text": "Apply a user-defined function (UDF) to extract information from a complex data type.",
+    "output_text": "val extractInfoUDF = udf((structColumn: StructType) => structColumn.field, StringType)
+                    val extractedData = df.withColumn('extracted_field', extractInfoUDF('complex_column'))"
+  }
+  {
+    "input_text": "Filter data based on a regular expression pattern.",
+    "output_text": "val filteredData = df.filter(col('text_column').rlike('pattern'))"
+  }
+  {
+    "input_text": "Convert timestamps from one time zone to another.",
+    "output_text": "val convertedData = df.withColumn('converted_timestamp', from_utc_timestamp('timestamp_column', 'America/New_York'))"
+  }
+  {
+    "input_text": "Union batch and streaming DataFrames into a single DataFrame.",
+    "output_text": "val unionedData = batchDF.union(streamingDF)"
+  }
+  {
+    "input_text": "Explode nested arrays and perform aggregation.",
+    "output_text": "val explodedData = df.withColumn('exploded_column', explode('nested_array'))
+                    val aggregatedData = explodedData.groupBy('id').agg(sum('exploded_column'))"
+  }
+  {
+    "input_text": "Analyze temporal data by comparing current and previous values.",
+    "output_text": "val laggedData = df.withColumn('lag_value', lag('value', 1).over(Window.orderBy('timestamp')))
+                    val leadData = df.withColumn('lead_value', lead('value', 1).over(Window.orderBy('timestamp')))"
+  }
+  {
+    "input_text": "Extract specific fields from JSON data using Spark SQL.",
+    "output_text": "val extractedData = spark.sql('SELECT field1, field2.nested_field FROM json_table')"
+  }
+  {
+    "input_text": "Perform windowed aggregation with custom range.",
+    "output_text": "val windowSpec = Window.partitionBy('category').orderBy('timestamp').rangeBetween(-7, 0)
+                    val aggregatedData = df.withColumn('rolling_avg', avg('value').over(windowSpec))"
+  }
+  {
+    "input_text": "Perform join operation with broadcast and bucketing optimization.",
+    "output_text": "val broadcastedTable = spark.sparkContext.broadcast(broadcastDF)
+                    val joinedData = bucketedDF.join(broadcastedTable.value, bucketedDF('key') === broadcastedTable('key'))"
+  }
+  {
+    "input_text": "Handle JSON data with evolving schema using DataFrame API.",
+    "output_text": "val jsonDF = spark.read.json('s3://path/to/json_data')
+                    jsonDF.printSchema()"
+  }
+  {
+    "input_text": "Analyze temporal data by bucketing into hourly intervals and calculating aggregate statistics.",
+    "output_text": "val bucketedData = df.groupBy(window('timestamp', '1 hour')).agg(sum('value'), avg('value'))"
+  }
+  {
+    "input_text": "Perform stateful aggregation on streaming data to calculate cumulative sums.",
+    "output_text": "val statefulAggregation = streamingDF.groupByKey(_.key).mapGroupsWithState(StateSpec.function(mappingFunction))"
+  }
+  {
+    "input_text": "Perform spatial analysis on geospatial data using GeoSpark library.",
+    "output_text": "val spatialAnalysis = df.select(ST_Intersects('geometry_column', 'geometry_polygon'))"
+  }
+  {
+    "input_text": "Perform text analysis by transforming text data into TF-IDF vectors.",
+    "output_text": "val tfidfVectorizer = new HashingTF().transform(tokenizedData)
+                    val idfModel = new IDF().fit(tfidfVectorizer)"
+  }
+  {
+    "input_text": "Read Avro data from Kafka using Confluent Schema Registry.",
+    "output_text": "val avroDF = spark.read.format('avro').load('kafka://path/to/avro_data')"
+  }
+  {
+    "input_text": "Analyze temporal data by comparing current and previous values using lag and lead functions.",
+    "output_text": "val laggedData = df.withColumn('lag_value', lag('value', 1).over(Window.orderBy('timestamp')))
+                    val leadData = df.withColumn('lead_value', lead('value', 1).over(Window.orderBy('timestamp')))"
+  }
+  {
+    "input_text": "Flatten nested JSON data to simplify schema and improve query performance.",
+    "output_text": "val flattenedData = df.select(flatten(struct('nested_struct.*')))"
+  }
+  {
+    "input_text": "Perform graph analysis on connected data using GraphFrames library.",
+    "output_text": "val graph = GraphFrame(verticesDF, edgesDF)
+                    val shortestPaths = graph.shortestPaths.landmarks(Seq('source', 'target'))"
+  }
+  {
+    "input_text": "Impute missing values in DataFrame columns using mean or median imputation.",
+    "output_text": "val imputedDF = df.na.fill(meanValue, Seq('column1', 'column2'))"
+  }
+  {
+    "input_text": "Perform complex operations on nested arrays using Spark SQL higher-order functions.",
+    "output_text": "val processedData = df.withColumn('processed_array', transform(col('nested_array'), element => expr))"
+  }
+  {
+    "input_text": "Perform geospatial analysis and raster processing using GeoTrellis library.",
+    "output_text": "val raster = Raster('path_to_raster_file')
+                    val result = raster.tileToLayout(layoutDefinition)"
+  }
+  {
+    "input_text": "Aggregate streaming data with watermarking to handle late arrivals.",
+    "output_text": "val aggregatedStream = streamingDF.withWatermark('timestamp', '1 hour').groupBy(window('timestamp', '1 hour')).agg(sum('value'))"
+  }
+  {
+    "input_text": "Perform complex data transformations using Spark SQL functions.",
+    "output_text": "val transformedData = df.withColumn('new_column', expr('complex_function(column)'))"
+  }
+  {
+    "input_text": "Build and evaluate machine learning models using MLlib library.",
+    "output_text": "val model = RandomForest.trainClassifier(trainingData, numClasses, categoricalFeaturesInfo, numTrees, featureSubsetStrategy, impurity, maxDepth, maxBins)
+                    val predictions = model.predict(testData)"
+  }
+  {
+    "input_text": "Perform time series analysis by applying windowed functions and temporal operations.",
+    "output_text": "val timeSeriesAnalysis = df.withColumn('rolling_avg', avg('value').over(Window.partitionBy('category').orderBy('timestamp').rowsBetween(-3, 0)))"
+  }
+  {
+    "input_text": "Read and process XML data using Databricks Spark-XML library.",
+    "output_text": "val xmlDF = spark.read.format('xml').option('rowTag', 'record').load('path/to/xml_data')"
+  }
+  {
+    "input_text": "Perform join operations on streaming DataFrames with stateful processing.",
+    "output_text": "val joinedStream = stream1.join(stream2, joinCondition).mapGroupsWithState(StateSpec.function(stateUpdateFunction))"
+  }
+  {
+    "input_text": "Perform spatial analysis and geometry operations using Spark Spatial library.",
+    "output_text": "val spatialDataAnalysis = df.select(ST_Intersection('geometry1', 'geometry2'))"
+  }
+  {
+    "input_text": "Analyze and process graph data using GraphX library for distributed graph computation.",
+    "output_text": "val graph = Graph(vertices, edges)
+                    val connectedComponents = graph.connectedComponents().vertices"
+  }
+                  
