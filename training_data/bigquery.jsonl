@@ -133,3 +133,533 @@
 {"input_text": "Perform a windowed sum calculation over the 'number' column partitioned by the 'sale' column.","output_text": "SELECT sale, SUM(number) OVER (PARTITION BY sale) AS `window` FROM (SELECT 'Books' AS sale, 2 AS number UNION ALL SELECT 'Cloths' AS sale, 3 AS number UNION ALL SELECT 'Books' AS sale, 6 AS number) AS table_3"}
 {"input_text": "Extract the value of the 'city' field from the JSON object using JSON_QUERY, and convert a struct to a JSON string using TO_JSON_STRING.","output_text": "SELECT JSON_QUERY('{\"order_id\": 3456, \"name\": \"Asma\",\"address\": {\"street\": \"Av Saint\",\"city\": \"paris\"}}', '$.address.city'), TO_JSON_STRING(STRUCT(3009 AS order_id, STRUCT('Abo' AS name)))"}  
 {"input_text": "Create a temporary JavaScript function called 'Addition' that adds 1 to the input value and apply it to each element in the array using UNNEST.", "output_text": "CREATE TEMP FUNCTION Addition(x FLOAT64) RETURNS FLOAT64 LANGUAGE js AS 'return x+1;'; SELECT val, Addition(val) AS result FROM UNNEST([1, 2, 3, 4, 5]) AS val;"}
+{
+    "input_text": "Retrieve data from multiple tables to analyze customer transactions and their demographics.",
+    "output_text": "SELECT c.customer_id, c.name, c.age, c.gender, t.transaction_id, t.transaction_date, t.amount, p.product_name \
+                   FROM customers c \
+                   JOIN transactions t ON c.customer_id = t.customer_id \
+                   JOIN products p ON t.product_id = p.product_id \
+                   WHERE t.transaction_date >= '2023-01-01' \
+                   AND t.transaction_date < '2024-01-01' \
+                   AND c.age BETWEEN 25 AND 40 \
+                   AND c.gender = 'Female';"
+  }
+  {
+    "input_text": "Retrieve hierarchical data of employees and their managers.",
+    "output_text": "WITH RECURSIVE EmployeeHierarchy AS ( \
+                      SELECT employee_id, name, manager_id \
+                      FROM employees \
+                      WHERE manager_id IS NULL \
+                      UNION ALL \
+                      SELECT e.employee_id, e.name, e.manager_id \
+                      FROM employees e \
+                      JOIN EmployeeHierarchy eh ON e.manager_id = eh.employee_id \
+                    ) \
+                    SELECT * FROM EmployeeHierarchy;"
+  }
+  {
+    "input_text": "Rank products based on total sales within each category.",
+    "output_text": "SELECT product_id, product_name, category, sales_amount, \
+                    RANK() OVER (PARTITION BY category ORDER BY sales_amount DESC) AS sales_rank \
+                    FROM products_sales;"
+  }
+  {
+    "input_text": "Pivot sales data to show total sales for each product in different months.",
+    "output_text": "SELECT * FROM ( \
+                      SELECT product_id, MONTH(order_date) AS month, SUM(sales_amount) AS total_sales \
+                      FROM sales_data \
+                      GROUP BY product_id, MONTH(order_date) \
+                    ) AS sales_pivot \
+                    PIVOT (SUM(total_sales) FOR month IN (1 AS Jan, 2 AS Feb, 3 AS Mar, ...)) AS sales_by_month;"
+  }
+  {
+    "input_text": "Calculate rolling average sales over a 3-month period for each product.",
+    "output_text": "SELECT product_id, order_date, sales_amount, \
+                    AVG(sales_amount) OVER (PARTITION BY product_id ORDER BY order_date \
+                                            ROWS BETWEEN 2 PRECEDING AND CURRENT ROW) AS rolling_avg_sales \
+                    FROM sales_data;"
+  }
+  {
+    "input_text": "Calculate total revenue, grouping sales into low, medium, and high price categories.",
+    "output_text": "SELECT CASE \
+                        WHEN price < 50 THEN 'Low' \
+                        WHEN price >= 50 AND price < 100 THEN 'Medium' \
+                        ELSE 'High' \
+                      END AS price_category, \
+                      SUM(revenue) AS total_revenue \
+                    FROM sales \
+                    GROUP BY price_category;"
+  }
+  {
+    "input_text": "Find customers who made purchases above the average purchase amount.",
+    "output_text": "SELECT customer_id, name, total_purchase_amount \
+                    FROM ( \
+                      SELECT c.customer_id, c.name, SUM(p.amount) AS total_purchase_amount \
+                      FROM customers c \
+                      JOIN purchases p ON c.customer_id = p.customer_id \
+                      GROUP BY c.customer_id, c.name \
+                    ) AS customer_purchases \
+                    WHERE total_purchase_amount > (SELECT AVG(amount) FROM purchases);"
+  }
+  {
+    "input_text": "Find all customers within a specified radius from a given location.",
+    "output_text": "SELECT customer_id, name, address \
+                    FROM customers \
+                    WHERE ST_DWithin(location, ST_MakePoint(37.7749, -122.4194), 1000);"
+  }
+  {
+    "input_text": "Identify and clean phone numbers in customer data.",
+    "output_text": "SELECT customer_id, name, REGEXP_REPLACE(phone, '[^0-9]+', '') AS cleaned_phone \
+                    FROM customers;"
+  }
+  {
+    "input_text": "Combine customer data from different sources using external tables.",
+    "output_text": "SELECT c.customer_id, c.name, e.email, p.phone \
+                    FROM customers c \
+                    JOIN EXTERNAL_QUERY('project.dataset', 'SELECT customer_id, email FROM external_emails') AS e \
+                    ON c.customer_id = e.customer_id \
+                    JOIN EXTERNAL_QUERY('project.dataset', 'SELECT customer_id, phone FROM external_phones') AS p \
+                    ON c.customer_id = p.customer_id;"
+  }
+  {
+    "input_text": "Rank products based on total sales within each category, considering only the top 3 products.",
+    "output_text": "SELECT product_id, product_name, category, sales_amount, \
+                    RANK() OVER (PARTITION BY category ORDER BY sales_amount DESC \
+                                 ROWS BETWEEN UNBOUNDED PRECEDING AND 2 FOLLOWING) AS sales_rank \
+                    FROM products_sales;"
+  }
+  {
+    "input_text": "Calculate the difference in sales amount from the previous month and the next month for each product.",
+    "output_text": "SELECT product_id, order_date, sales_amount, \
+                    LAG(sales_amount) OVER (PARTITION BY product_id ORDER BY order_date) AS prev_month_sales, \
+                    LEAD(sales_amount) OVER (PARTITION BY product_id ORDER BY order_date) AS next_month_sales \
+                    FROM sales_data;"
+  }
+  {
+    "input_text": "Calculate the total revenue and average revenue per customer for each product category.",
+    "output_text": "WITH CategoryRevenue AS ( \
+                      SELECT category, SUM(revenue) AS total_revenue \
+                      FROM sales \
+                      GROUP BY category \
+                    ) \
+                    SELECT s.category, cr.total_revenue, cr.total_revenue / COUNT(DISTINCT s.customer_id) AS avg_revenue_per_customer \
+                    FROM sales s \
+                    JOIN CategoryRevenue cr ON s.category = cr.category \
+                    GROUP BY s.category, cr.total_revenue;"
+  }
+  {
+    "input_text": "Find customers who made purchases in all product categories.",
+    "output_text": "SELECT customer_id, name \
+                    FROM customers c \
+                    WHERE NOT EXISTS ( \
+                      SELECT DISTINCT category \
+                      FROM products p \
+                      WHERE NOT EXISTS ( \
+                        SELECT 1 \
+                        FROM purchases pc \
+                        WHERE pc.customer_id = c.customer_id \
+                        AND pc.product_id = p.product_id \
+                      ) \
+                    );"
+  }
+  {
+    "input_text": "Find the shortest path between two locations in a network graph.",
+    "output_text": "WITH RECURSIVE ShortestPath AS ( \
+                      SELECT start_location, end_location, 0 AS distance, ARRAY[start_location] AS path \
+                      FROM network_graph \
+                      WHERE start_location = 'A' \
+                      UNION ALL \
+                      SELECT sp.start_location, ng.end_location, sp.distance + ng.distance, ARRAY_APPEND(sp.path, ng.end_location) \
+                      FROM ShortestPath sp \
+                      JOIN network_graph ng ON sp.end_location = ng.start_location \
+                      WHERE NOT ng.end_location IN UNNEST(sp.path) \
+                    ) \
+                    SELECT * FROM ShortestPath WHERE end_location = 'Z' ORDER BY distance LIMIT 1;"
+  }
+  {
+    "input_text": "Retrieve a random sample of 10% of data from a large table.",
+    "output_text": "SELECT * FROM table_name TABLESAMPLE SYSTEM (10);"
+  }
+  {
+    "input_text": "Find all locations within a specified distance from a given coordinate point.",
+    "output_text": "SELECT location_name, ST_DISTANCE(location_point, ST_GEOGPOINT(40.7128, -74.0060)) AS distance \
+                    FROM locations \
+                    WHERE ST_DISTANCE(location_point, ST_GEOGPOINT(40.7128, -74.0060)) <= 1000;"
+  }
+  {
+    "input_text": "Replace missing values in a column with a default value using a CASE statement.",
+    "output_text": "SELECT column1, \
+                    CASE \
+                      WHEN column2 IS NULL THEN 'Default' \
+                      ELSE column2 \
+                    END AS column2 \
+                    FROM table_name;"
+  }
+  {
+    "input_text": "Dynamically pivot data based on distinct values in a column.",
+    "output_text": "SELECT * FROM ( \
+                      SELECT key_column, pivot_column, value_column \
+                      FROM source_table \
+                    ) \
+                    PIVOT ( \
+                      MAX(value_column) FOR pivot_column IN ('value1', 'value2', 'value3') \
+                    );"
+  }
+  {
+    "input_text": "Calculate the moving average of a time series data over a window of 7 days.",
+    "output_text": "SELECT date, value, \
+                    AVG(value) OVER (ORDER BY date ROWS BETWEEN 6 PRECEDING AND CURRENT ROW) AS moving_avg \
+                    FROM time_series_data;"
+  }
+  {
+    "input_text": "Aggregate JSON data from multiple rows into a single JSON object.",
+    "output_text": "SELECT customer_id, \
+                    JSON_OBJECTAGG(product_id, quantity) AS products_ordered \
+                    FROM orders \
+                    GROUP BY customer_id;"
+  }
+  {
+    "input_text": "Aggregate JSON data from multiple rows into a single JSON object.",
+    "output_text": "SELECT customer_id, \
+                    JSON_OBJECTAGG(product_id, quantity) AS products_ordered \
+                    FROM orders \
+                    GROUP BY customer_id;"
+  }
+  {
+    "input_text": "Identify missing sequence numbers in a table.",
+    "output_text": "WITH NumberSequence AS ( \
+                      SELECT number \
+                      FROM GENERATE_SERIES(1, (SELECT MAX(sequence_number) FROM sequence_table)) AS number \
+                    ) \
+                    SELECT ns.number \
+                    FROM NumberSequence ns \
+                    LEFT JOIN sequence_table st ON ns.number = st.sequence_number \
+                    WHERE st.sequence_number IS NULL;"
+  }
+  {
+    "input_text": "Calculate total sales amount per hour, rounding transaction timestamps to the nearest hour.",
+    "output_text": "SELECT DATE_TRUNC('hour', transaction_timestamp) AS hour_start, \
+                    SUM(sales_amount) AS total_sales \
+                    FROM sales \
+                    GROUP BY hour_start;"
+  }
+  {
+    "input_text": "Calculate total sales amount for each category and its subcategories in a hierarchical product catalog.",
+    "output_text": "WITH RECURSIVE CategoryHierarchy AS ( \
+                      SELECT category_id, parent_category_id, category_name \
+                      FROM categories \
+                      WHERE parent_category_id IS NULL \
+                      UNION ALL \
+                      SELECT c.category_id, c.parent_category_id, c.category_name \
+                      FROM categories c \
+                      JOIN CategoryHierarchy ch ON c.parent_category_id = ch.category_id \
+                    ) \
+                    SELECT ch.category_name, SUM(s.sales_amount) AS total_sales \
+                    FROM CategoryHierarchy ch \
+                    LEFT JOIN products p ON ch.category_id = p.category_id \
+                    LEFT JOIN sales s ON p.product_id = s.product_id \
+                    GROUP BY ch.category_name;"
+  }
+  {
+    "input_text": "Flatten nested JSON data to extract specific fields.",
+    "output_text": "SELECT json_data->>'field1' AS field1, \
+                    json_data->'field2'->>'subfield1' AS subfield1, \
+                    json_data->'field2'->>'subfield2' AS subfield2 \
+                    FROM json_table;"
+  }
+  {
+    "input_text": "Calculate total sales amount for each combination of product category and customer segment.",
+    "output_text": "SELECT category, customer_segment, SUM(sales_amount) AS total_sales \
+                    FROM sales \
+                    GROUP BY GROUPING SETS ((category), (customer_segment), (category, customer_segment));"
+  }
+  {
+    "input_text": "Retrieve top 3 customers with the highest total purchase amount in each product category.",
+    "output_text": "SELECT * FROM ( \
+                      SELECT category, customer_id, SUM(purchase_amount) AS total_purchase_amount, \
+                      ROW_NUMBER() OVER (PARTITION BY category ORDER BY SUM(purchase_amount) DESC) AS rank \
+                      FROM purchases \
+                      GROUP BY category, customer_id \
+                    ) AS ranked_customers \
+                    WHERE rank <= 3;"
+  }
+  {
+    "input_text": "Group user activity into sessions based on time gaps between consecutive events.",
+    "output_text": "SELECT user_id, session_id, MIN(event_timestamp) AS session_start, MAX(event_timestamp) AS session_end \
+                    FROM ( \
+                      SELECT user_id, event_timestamp, \
+                      SUM(is_new_session) OVER (ORDER BY event_timestamp) AS session_id \
+                      FROM ( \
+                        SELECT user_id, event_timestamp, \
+                        CASE \
+                          WHEN LAG(event_timestamp) OVER (PARTITION BY user_id ORDER BY event_timestamp) IS NULL OR \
+                               event_timestamp - LAG(event_timestamp) OVER (PARTITION BY user_id ORDER BY event_timestamp) > INTERVAL 30 MINUTE \
+                          THEN 1 \
+                          ELSE 0 \
+                        END AS is_new_session \
+                        FROM user_activity \
+                      ) AS session_markers \
+                    ) AS sessionized_data \
+                    GROUP BY user_id, session_id;"
+  }
+  {
+    "input_text": "Dynamically pivot data based on distinct values in a column and calculate aggregates.",
+    "output_text": "SELECT pivot_column, \
+                    SUM(CASE WHEN dynamic_column = 'value1' THEN value END) AS total_value1, \
+                    SUM(CASE WHEN dynamic_column = 'value2' THEN value END) AS total_value2, \
+                    SUM(CASE WHEN dynamic_column = 'value3' THEN value END) AS total_value3 \
+                    FROM ( \
+                      SELECT pivot_column, dynamic_column, value \
+                      FROM source_table \
+                    ) \
+                    GROUP BY pivot_column;"
+  }
+  {
+    "input_text": "Retrieve data from a table and its history using a lateral join with a temporal table.",
+    "output_text": "SELECT t.*, h.* \
+                    FROM main_table t \
+                    LEFT JOIN LATERAL ( \
+                      SELECT * \
+                      FROM history_table h \
+                      WHERE h.id = t.id \
+                      AND h.valid_from <= t.timestamp \
+                      AND h.valid_to > t.timestamp \
+                      ORDER BY h.valid_from DESC \
+                      LIMIT 1 \
+                    ) h ON TRUE;"
+  }
+  {
+    "input_text": "Calculate the exponential moving average of a time series data.",
+    "output_text": "SELECT timestamp, value, \
+                    AVG(value) OVER (ORDER BY timestamp ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS simple_moving_avg, \
+                    AVG(value) OVER (ORDER BY timestamp ROWS BETWEEN 4 PRECEDING AND CURRENT ROW) AS exponential_moving_avg \
+                    FROM time_series_data;"
+  }
+  {
+    "input_text": "Dynamically pivot data based on distinct values in a column and calculate aggregates, filtering based on a condition.",
+    "output_text": "SELECT pivot_column, \
+                    SUM(CASE WHEN dynamic_column = 'value1' THEN value END) AS total_value1, \
+                    SUM(CASE WHEN dynamic_column = 'value2' THEN value END) AS total_value2, \
+                    SUM(CASE WHEN dynamic_column = 'value3' THEN value END) AS total_value3 \
+                    FROM ( \
+                      SELECT pivot_column, dynamic_column, value \
+                      FROM source_table \
+                      WHERE condition_column = 'condition_value' \
+                    ) \
+                    GROUP BY pivot_column;"
+  }
+  {
+    "input_text": "Retrieve hierarchical data along with the path from root to leaf nodes.",
+    "output_text": "WITH RECURSIVE HierarchicalPath AS ( \
+                      SELECT node_id, node_name, ARRAY[node_id] AS path \
+                      FROM hierarchical_data \
+                      WHERE parent_node_id IS NULL \
+                      UNION ALL \
+                      SELECT hd.node_id, hd.node_name, hp.path || hd.node_id \
+                      FROM hierarchical_data hd \
+                      JOIN HierarchicalPath hp ON hd.parent_node_id = hp.node_id \
+                    ) \
+                    SELECT node_id, node_name, path FROM HierarchicalPath;"
+  }
+  {
+    "input_text": "Calculate total revenue and average revenue per customer, along with grand totals.",
+    "output_text": "SELECT customer_id, \
+                    SUM(revenue) AS total_revenue, \
+                    AVG(revenue) AS avg_revenue \
+                    FROM sales \
+                    GROUP BY GROUPING SETS ((customer_id), ());"
+  }
+  {
+    "input_text": "Calculate the time difference between consecutive events for each user.",
+    "output_text": "SELECT user_id, event_timestamp, \
+                    EXTRACT(EPOCH FROM (event_timestamp - LAG(event_timestamp) OVER (PARTITION BY user_id ORDER BY event_timestamp))) AS time_diff_seconds \
+                    FROM user_activity;"
+  }
+  {
+    "input_text": "Extract specific elements from JSON arrays and perform aggregation.",
+    "output_text": "SELECT jsonb_array_elements(data->'array_column') AS array_element, \
+                    COUNT(*) AS frequency \
+                    FROM table_with_json \
+                    GROUP BY array_element;"
+  }
+  {
+    "input_text": "Group website clickstream data into sessions based on user activity.",
+    "output_text": "SELECT user_id, session_id, MIN(event_timestamp) AS session_start, MAX(event_timestamp) AS session_end \
+                    FROM ( \
+                      SELECT user_id, event_timestamp, \
+                      SUM(is_new_session) OVER (ORDER BY event_timestamp) AS session_id \
+                      FROM ( \
+                        SELECT user_id, event_timestamp, \
+                        CASE \
+                          WHEN LAG(event_timestamp) OVER (PARTITION BY user_id ORDER BY event_timestamp) IS NULL OR \
+                               event_timestamp - LAG(event_timestamp) OVER (PARTITION BY user_id ORDER BY event_timestamp) > INTERVAL '30' MINUTE \
+                          THEN 1 \
+                          ELSE 0 \
+                        END AS is_new_session \
+                        FROM clickstream_data \
+                      ) AS session_markers \
+                    ) AS sessionized_data \
+                    GROUP BY user_id, session_id;"
+  }
+  {
+    "input_text": "Find the nearest neighboring points for each point in a spatial dataset.",
+    "output_text": "SELECT p1.point_id AS point_id_1, p2.point_id AS point_id_2, \
+                    ST_DISTANCE(p1.location, p2.location) AS distance \
+                    FROM points p1 \
+                    CROSS JOIN points p2 \
+                    WHERE p1.point_id <> p2.point_id \
+                    ORDER BY distance;"
+  }
+  {
+    "input_text": "Fill missing values in a time series data using linear interpolation.",
+    "output_text": "SELECT timestamp, value, \
+                    COALESCE(value, INTERPOLATE_LINEAR(value) OVER (ORDER BY timestamp)) AS interpolated_value \
+                    FROM time_series_data;"
+  }
+  {
+    "input_text": "Identify sequences of events and calculate time intervals between them.",
+    "output_text": "SELECT user_id, event_type, event_timestamp, \
+                    LAG(event_type) OVER (PARTITION BY user_id ORDER BY event_timestamp) AS prev_event, \
+                    LEAD(event_type) OVER (PARTITION BY user_id ORDER BY event_timestamp) AS next_event, \
+                    event_timestamp - LAG(event_timestamp) OVER (PARTITION BY user_id ORDER BY event_timestamp) AS time_since_prev_event \
+                    FROM user_events;"
+  }
+  {
+    "input_text": "Calculate the total sales amount for each product category where the sales amount exceeds a certain threshold.",
+    "output_text": "SELECT product_category, \
+                    SUM(sales_amount) FILTER (WHERE sales_amount > 1000) AS total_sales_above_threshold \
+                    FROM sales_data \
+                    GROUP BY product_category;"
+  }
+  {
+    "input_text": "Rank customers into quartiles based on their total purchase amount.",
+    "output_text": "SELECT customer_id, total_purchase_amount, \
+                    NTILE(4) OVER (ORDER BY total_purchase_amount) AS quartile \
+                    FROM ( \
+                      SELECT customer_id, SUM(purchase_amount) AS total_purchase_amount \
+                      FROM purchases \
+                      GROUP BY customer_id \
+                    ) AS customer_purchases;"
+  }
+  {
+    "input_text": "Extract and unnest nested JSON arrays to perform analysis.",
+    "output_text": "SELECT data->>'field1' AS field1, \
+                    jsonb_array_elements(data->'field2'->'nested_array') AS nested_array_element \
+                    FROM json_data;"
+  }
+  {
+    "input_text": "Retrieve all emails that match a specific pattern.",
+    "output_text": "SELECT email \
+                    FROM users \
+                    WHERE email ~ '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,}$';"
+  }
+  {
+    "input_text": "Compute the 7-day moving average of stock prices for each stock.",
+    "output_text": "SELECT stock_symbol, trade_date, stock_price, \
+                    AVG(stock_price) OVER (PARTITION BY stock_symbol ORDER BY trade_date ROWS BETWEEN 6 PRECEDING AND CURRENT ROW) AS moving_average \
+                    FROM stock_prices;"
+  }
+  {
+    "input_text": "Find all transactions that occurred exactly one month ago.",
+    "output_text": "SELECT * \
+                    FROM transactions \
+                    WHERE transaction_date = CURRENT_DATE - INTERVAL '1' MONTH;"
+  }
+  {
+    "input_text": "Identify transactions with amounts exceeding the 95th percentile.",
+    "output_text": "SELECT * \
+                    FROM transactions \
+                    WHERE amount > (SELECT PERCENTILE_CONT(0.95) WITHIN GROUP (ORDER BY amount) FROM transactions);"
+  }
+  {
+    "input_text": "Convert transaction timestamps from UTC to local time zone.",
+    "output_text": "SELECT transaction_id, transaction_timestamp AT TIME ZONE 'UTC' AT TIME ZONE 'America/New_York' AS local_time \
+                    FROM transactions;"
+  }
+  {
+    "input_text": "Identify frequently co-occurring items in purchase transactions.",
+    "output_text": "SELECT items, COUNT(*) AS frequency \
+                    FROM ( \
+                      SELECT ARRAY_AGG(item) AS items \
+                      FROM transactions \
+                      GROUP BY transaction_id \
+                    ) AS transaction_items \
+                    GROUP BY items \
+                    ORDER BY frequency DESC;"
+  }
+  {
+    "input_text": "Find all customers within a certain distance from a specific location.",
+    "output_text": "SELECT customer_id, customer_name \
+                    FROM customers \
+                    WHERE ST_DISTANCE(location, ST_POINT(-73.935242, 40.730610)) < 1000;"
+  }
+  {
+    "input_text": "Retrieve all ancestors of a specific node in a hierarchical data structure.",
+    "output_text": "WITH RECURSIVE Ancestors AS ( \
+                      SELECT node_id, parent_id \
+                      FROM nodes \
+                      WHERE node_id = 'specific_node_id' \
+                      UNION ALL \
+                      SELECT n.node_id, n.parent_id \
+                      FROM nodes n \
+                      JOIN Ancestors a ON n.node_id = a.parent_id \
+                    ) \
+                    SELECT * FROM Ancestors;"
+  }
+  {
+    "input_text": "Fill missing values in a dataset using linear regression based on other related variables.",
+    "output_text": "SELECT column1, \
+                    CASE \
+                      WHEN column2 IS NULL THEN PredictLinearRegression(column1) \
+                      ELSE column2 \
+                    END AS column2 \
+                    FROM dataset;"
+  }
+  {
+    "input_text": "Extract all email addresses from a text column.",
+    "output_text": "SELECT REGEXP_EXTRACT(text_column, r'([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,})') AS email \
+                    FROM table;"
+  }
+  {
+    "input_text": "Identify data points with values outside a certain z-score threshold.",
+    "output_text": "SELECT * \
+                    FROM data_table \
+                    WHERE ABS(value - AVG(value) OVER()) / STDDEV(value) OVER() > 3;"
+  }
+  {
+    "input_text": "Calculate the time difference between consecutive events for each user.",
+    "output_text": "SELECT user_id, event_timestamp, \
+                    EXTRACT(EPOCH FROM (event_timestamp - LAG(event_timestamp) OVER (PARTITION BY user_id ORDER BY event_timestamp))) AS time_diff_seconds \
+                    FROM user_activity;"
+  }
+  {
+    "input_text": "Pivot data based on a condition and calculate aggregates.",
+    "output_text": "SELECT category, \
+                    SUM(CASE WHEN condition_column = 'value1' THEN value END) AS total_value1, \
+                    SUM(CASE WHEN condition_column = 'value2' THEN value END) AS total_value2 \
+                    FROM source_table \
+                    GROUP BY category;"
+  }
+  {
+    "input_text": "Extract specific elements from JSONB data and perform analysis.",
+    "output_text": "SELECT jsonb_column->>'field1' AS field1, \
+                    jsonb_array_elements(jsonb_column->'field2'->'nested_array') AS nested_array_element \
+                    FROM jsonb_table;"
+  }
+  {
+    "input_text": "Perform sentiment analysis on text data.",
+    "output_text": "SELECT text_column, SENTIMENT(text_column) AS sentiment_score \
+                    FROM text_data;"
+  }
+  {
+    "input_text": "Convert timestamps from one time zone to another.",
+    "output_text": "SELECT timestamp_column AT TIME ZONE 'UTC' AT TIME ZONE 'America/New_York' AS local_time \
+                    FROM table;"
+  }
+  {
+    "input_text": "Identify and correct misspelled words using Levenshtein distance.",
+    "output_text": "SELECT word, LEVENSHTEIN(word, 'correct_word') AS distance \
+                    FROM words_table \
+                    WHERE LEVENSHTEIN(word, 'correct_word') <= 2;"
+  }
+   

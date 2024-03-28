@@ -5,7 +5,7 @@ def get_file_format(file):
     if file.endswith('.csv'):
         csv_to_jsonl(file, "output.jsonl")
     elif file.endswith('.json'):
-        json_to_jsonl(file, file.replace('.json', "output.jsonl"))
+        json_to_jsonl(file, file.replace('.json', "file_convertered/output.jsonl"))
     else:
         return "Invalid file format"
 

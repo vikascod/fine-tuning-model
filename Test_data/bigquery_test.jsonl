@@ -1,0 +1,198 @@
+{"input_text": "Retrieve user profile information such as name, email, and phone number.", "output_text": "SELECT name, email, phone FROM `project.dataset.users` LIMIT 10;"}
+{"input_text": "Fetch product sales data including product ID, name, quantity sold, and revenue generated.", "output_text": "SELECT product_id, product_name, quantity_sold, revenue FROM `project.dataset.sales` LIMIT 10;"}
+{"input_text": "Query website traffic data to analyze page views, unique visitors, and session duration.", "output_text": "SELECT page_url, page_views, unique_visitors, session_duration FROM `project.dataset.website_traffic` LIMIT 10;"}
+{"input_text": "Retrieve customer feedback data containing comments, ratings, and sentiment analysis.", "output_text": "SELECT comment, rating, sentiment FROM `project.dataset.customer_feedback` LIMIT 10;"}
+{"input_text": "Fetch financial transactions data including transaction ID, amount, and transaction type.", "output_text": "SELECT transaction_id, amount, transaction_type FROM `project.dataset.transactions` LIMIT 10;"}
+{"input_text": "Query employee performance data to analyze key performance indicators and evaluations.", "output_text": "SELECT employee_id, kpi_score, evaluation_result FROM `project.dataset.employee_performance` LIMIT 10;"}
+{"input_text": "Retrieve inventory management data including product stock levels, reorder quantities, and last update timestamps.", "output_text": "SELECT product_id, stock_level, reorder_quantity, last_update_timestamp FROM `project.dataset.inventory` LIMIT 10;"}
+{"input_text": "Fetch social media engagement data including likes, shares, comments, and user interactions.", "output_text": "SELECT post_id, likes, shares, comments, interactions FROM `project.dataset.social_media_engagement` LIMIT 10;"}
+{"input_text": "Query customer segmentation data to analyze customer behavior and segmentations.", "output_text": "SELECT customer_id, segment, behavior_metrics FROM `project.dataset.customer_segmentation` LIMIT 10;"}
+{"input_text": "Retrieve product reviews data including review text, sentiment analysis, and product ratings.", "output_text": "SELECT review_text, sentiment, rating FROM `project.dataset.product_reviews` LIMIT 10;"}
+{"input_text": "Fetch order fulfillment data including order ID, shipping status, and delivery date.", "output_text": "SELECT order_id, shipping_status, delivery_date FROM `project.dataset.order_fulfillment` LIMIT 10;"}
+{"input_text": "Query customer churn data to analyze churn rates and customer retention strategies.", "output_text": "SELECT customer_id, churn_status, retention_strategy FROM `project.dataset.customer_churn` LIMIT 10;"}
+{"input_text": "Retrieve employee training data including training programs, completion status, and training scores.", "output_text": "SELECT employee_id, training_program, completion_status, training_score FROM `project.dataset.employee_training` LIMIT 10;"}
+{"input_text": "Fetch product inventory data including SKU, stock levels, and warehouse locations.", "output_text": "SELECT sku, stock_level, warehouse_location FROM `project.dataset.product_inventory` LIMIT 10;"}
+{"input_text": "Query marketing campaign data to analyze campaign performance and ROI.", "output_text": "SELECT campaign_id, impressions, clicks, conversions, ROI FROM `project.dataset.marketing_campaigns` LIMIT 10;"}
+{"input_text": "Retrieve customer support tickets data including ticket ID, category, and resolution status.", "output_text": "SELECT ticket_id, category, resolution_status FROM `project.dataset.support_tickets` LIMIT 10;"}
+{"input_text": "Retrieve customer support tickets data including ticket ID, category, and resolution status.", "output_text": "SELECT ticket_id, category, resolution_status FROM `project.dataset.support_tickets` LIMIT 10;"}
+{"input_text": "Query supply chain data to analyze procurement, manufacturing, and distribution processes.", "output_text": "SELECT process_step, quantity, cost FROM `project.dataset.supply_chain` LIMIT 10;"}
+{"input_text": "Retrieve healthcare patient records including patient ID, medical history, and treatment plans.", "output_text": "SELECT patient_id, medical_history, treatment_plan FROM `project.dataset.patient_records` LIMIT 10;"}
+{"input_text": "Query e-commerce cart abandonment data to analyze abandonment rates and recovery strategies.", "output_text": "SELECT user_id, abandonment_rate, recovery_strategy FROM `project.dataset.cart_abandonment` LIMIT 10;"}
+{"input_text": "Fetch financial market data including stock prices, trading volumes, and market indices.", "output_text": "SELECT stock_symbol, price, volume, market_index FROM `project.dataset.market_data` LIMIT 10;"}
+{"input_text": "Retrieve employee satisfaction survey data including survey responses, satisfaction scores, and feedback.", "output_text": "SELECT employee_id, satisfaction_score, feedback FROM `project.dataset.employee_satisfaction_survey` LIMIT 10;"}
+{"input_text": "Query social network data to analyze connections, interactions, and user engagement.", "output_text": "SELECT user_id, connection_count, interaction_count, engagement_level FROM `project.dataset.social_network` LIMIT 10;"}
+{"input_text": "Fetch logistics tracking data including shipment IDs, tracking status, and delivery times.", "output_text": "SELECT shipment_id, tracking_status, delivery_time FROM `project.dataset.logistics_tracking` LIMIT 10;"}
+{"input_text": "Query customer preferences data to analyze product preferences, interests, and buying behavior.", "output_text": "SELECT customer_id, product_preference, interest_level, buying_behavior FROM `project.dataset.customer_preferences` LIMIT 10;"}
+{"input_text": "Retrieve education assessment data including student scores, performance metrics, and learning outcomes.", "output_text": "SELECT student_id, score, performance_metric, learning_outcome FROM `project.dataset.education_assessment` LIMIT 10;"}
+{"input_text": "Fetch flight booking data including flight numbers, departure times, and passenger details.", "output_text": "SELECT flight_number, departure_time, passenger_name FROM `project.dataset.flight_bookings` LIMIT 10;"}
+{"input_text": "Query retail store sales data to analyze sales trends, product performance, and customer behavior.", "output_text": "SELECT store_id, sales_amount, product_performance, customer_behavior FROM `project.dataset.retail_store_sales` LIMIT 10;"}
+{"input_text": "Retrieve customer loyalty program data including loyalty points, rewards, and redemption history.", "output_text": "SELECT customer_id, loyalty_points, rewards, redemption_history FROM `project.dataset.customer_loyalty_program` LIMIT 10;"}
+{"input_text": "Fetch climate data including temperature, precipitation, and weather patterns.", "output_text": "SELECT location, temperature, precipitation, weather_pattern FROM `project.dataset.climate_data` LIMIT 10;"}
+{"input_text": "Query HR recruitment data to analyze job openings, candidate applications, and hiring decisions.", "output_text": "SELECT job_title, application_count, hiring_decision FROM `project.dataset.hr_recruitment` LIMIT 10;"}
+{"input_text": "Retrieve online retail customer data including customer IDs, purchase history, and shopping preferences.", "output_text": "SELECT customer_id, purchase_history, shopping_preferences FROM `project.dataset.online_retail_customers` LIMIT 10;"}
+{"input_text": "Fetch telecom usage data including call logs, data usage, and subscription plans.", "output_text": "SELECT user_id, call_duration, data_usage, subscription_plan FROM `project.dataset.telecom_usage` LIMIT 10;"}
+{"input_text": "Query energy consumption data to analyze usage patterns, consumption trends, and efficiency metrics.", "output_text": "SELECT meter_id, usage_pattern, consumption_trend, efficiency_metric FROM `project.dataset.energy_consumption` LIMIT 10;"}
+{"input_text": "Retrieve hotel booking data including booking IDs, check-in dates, and guest details.", "output_text": "SELECT booking_id, check_in_date, guest_details FROM `project.dataset.hotel_booking` LIMIT 10;"}
+{"input_text": "Fetch inventory replenishment data including reorder levels, stockouts, and replenishment quantities.", "output_text": "SELECT product_id, reorder_level, stockout_indicator, replenishment_quantity FROM `project.dataset.inventory_replenishment` LIMIT 10;"}
+{"input_text": "Query survey response data to analyze responses, satisfaction levels, and survey completion rates.", "output_text": "SELECT respondent_id, response, satisfaction_level, completion_rate FROM `project.dataset.survey_responses` LIMIT 10;"}
+{"input_text": "Retrieve public transportation data including routes, schedules, and passenger counts.", "output_text": "SELECT route_id, schedule, passenger_count FROM `project.dataset.public_transportation` LIMIT 10;"}
+{"input_text": "Fetch real estate market data including property listings, prices, and market trends.", "output_text": "SELECT property_id, listing_price, market_trend FROM `project.dataset.real_estate_market` LIMIT 10;"}
+{"input_text": "Query travel destination data to analyze visitor demographics, attractions, and travel trends.", "output_text": "SELECT destination_name, visitor_demographics, attractions, travel_trends FROM `project.dataset.travel_destinations` LIMIT 10;"}
+{"input_text": "Retrieve agricultural crop yield data including crop types, yield estimates, and harvest times.", "output_text": "SELECT crop_type, yield_estimate, harvest_time FROM `project.dataset.crop_yield` LIMIT 10;"}
+{"input_text": "Fetch music streaming data including song IDs, play counts, and user playlists.", "output_text": "SELECT song_id, play_count, user_playlist FROM `project.dataset.music_streaming` LIMIT 10;"}
+{"input_text": "Query retail loyalty card data to analyze cardholder spending, rewards earned, and redemption history.", "output_text": "SELECT cardholder_id, spending_behavior, rewards_earned, redemption_history FROM `project.dataset.retail_loyalty_cards` LIMIT 10;"}
+{"input_text": "Retrieve healthcare appointment data including patient appointments, doctor schedules, and appointment outcomes.", "output_text": "SELECT patient_id, appointment_datetime, doctor_schedule, appointment_outcome FROM `project.dataset.healthcare_appointments` LIMIT 10;"}
+{"input_text": "Fetch insurance claim data including policy IDs, claim amounts, and claim statuses.", "output_text": "SELECT policy_id, claim_amount, claim_status FROM `project.dataset.insurance_claims` LIMIT 10;"}
+{"input_text": "Query online auction data to analyze bidding activity, auction outcomes, and winning bids.", "output_text": "SELECT auction_id, bidding_activity, auction_outcome, winning_bid FROM `project.dataset.online_auctions` LIMIT 10;"}
+{"input_text": "Retrieve food delivery data including order IDs, delivery times, and customer ratings.", "output_text": "SELECT order_id, delivery_time, customer_rating FROM `project.dataset.food_delivery` LIMIT 10;"}
+{
+    "input_text": "Identify patterns in sequential data by comparing current and previous values.",
+    "output_text": "SELECT user_id, event_timestamp, event_type, \
+                    LAG(event_type) OVER (PARTITION BY user_id ORDER BY event_timestamp) AS prev_event, \
+                    LEAD(event_type) OVER (PARTITION BY user_id ORDER BY event_timestamp) AS next_event \
+                    FROM user_events;"
+  }
+  {
+    "input_text": "Compute running totals of a numeric column.",
+    "output_text": "SELECT date, value, \
+                    SUM(value) OVER (ORDER BY date) AS running_total \
+                    FROM dataset;"
+  }
+  {
+    "input_text": "Identify outliers in a dataset using the interquartile range method.",
+    "output_text": "SELECT * \
+                    FROM data_table \
+                    WHERE value < (Q1 - 1.5 * IQR) OR value > (Q3 + 1.5 * IQR);"
+  }
+  {
+    "input_text": "Decompose time series data into trend, seasonality, and residual components.",
+    "output_text": "SELECT timestamp, value, \
+                    STT_DECOMP(value) AS decomposition \
+                    FROM time_series_data;"
+  }
+  {
+    "input_text": "Compute weighted moving averages of a time series data.",
+    "output_text": "SELECT date, value, \
+                    AVG(value) OVER (ORDER BY date ROWS BETWEEN 6 PRECEDING AND CURRENT ROW) AS weighted_moving_average \
+                    FROM dataset;"
+  }
+  {
+    "input_text": "Find the shortest path between two nodes in a network graph.",
+    "output_text": "SELECT node1, node2, \
+                    ST_SHORTEST_PATH(graph, node1, node2) AS shortest_path_length \
+                    FROM network_data;"
+  }
+  {
+    "input_text": "Bucket transaction timestamps into hourly intervals and calculate total sales amount for each interval.",
+    "output_text": "SELECT DATE_TRUNC('hour', transaction_timestamp) AS hour_interval, \
+                    SUM(sales_amount) AS total_sales_amount \
+                    FROM transactions \
+                    GROUP BY hour_interval;"
+  }
+  {
+    "input_text": "Extract specific information from XML data using XPath expressions.",
+    "output_text": "SELECT \
+                    EXTRACTVALUE(xml_column, '/root/element1') AS element1_value, \
+                    EXTRACTVALUE(xml_column, '/root/element2') AS element2_value \
+                    FROM xml_data;"
+  }
+  {
+    "input_text": "Compute the returns of a portfolio based on the performance of individual assets.",
+    "output_text": "SELECT portfolio_id, \
+                    (SUM(asset_value_at_end) - SUM(asset_value_at_start)) / SUM(asset_value_at_start) AS portfolio_return \
+                    FROM asset_performance \
+                    GROUP BY portfolio_id;"
+  }
+  {
+    "input_text": "Fill missing values in a time series data using linear interpolation.",
+    "output_text": "SELECT timestamp, value, \
+                    COALESCE(value, INTERPOLATE_LINEAR(value) OVER (ORDER BY timestamp)) AS interpolated_value \
+                    FROM time_series_data;"
+  }
+  {
+    "input_text": "Sessionize clickstream data based on user activity and calculate session duration.",
+    "output_text": "WITH SessionizedClickstream AS ( \
+                      SELECT user_id, event_timestamp, \
+                      SUM(new_session_flag) OVER (PARTITION BY user_id ORDER BY event_timestamp) AS session_id \
+                      FROM ( \
+                        SELECT user_id, event_timestamp, \
+                        CASE \
+                          WHEN LAG(event_timestamp) OVER (PARTITION BY user_id ORDER BY event_timestamp) IS NULL OR \
+                               event_timestamp - LAG(event_timestamp) OVER (PARTITION BY user_id ORDER BY event_timestamp) > INTERVAL '30' MINUTE \
+                          THEN 1 \
+                          ELSE 0 \
+                        END AS new_session_flag \
+                        FROM clickstream_data \
+                      ) AS session_markers \
+                    ) \
+                    SELECT user_id, session_id, MIN(event_timestamp) AS session_start, \
+                    MAX(event_timestamp) AS session_end, \
+                    TIMESTAMP_DIFF(MAX(event_timestamp), MIN(event_timestamp), SECOND) AS session_duration \
+                    FROM SessionizedClickstream \
+                    GROUP BY user_id, session_id;"
+  }
+  {
+    "input_text": "Calculate the Customer Lifetime Value (CLV) based on historical purchase data.",
+    "output_text": "SELECT customer_id, \
+                    SUM(purchase_amount) AS total_purchase_amount, \
+                    COUNT(DISTINCT order_id) AS total_orders, \
+                    AVG(purchase_amount) AS average_order_value, \
+                    SUM(purchase_amount) / COUNT(DISTINCT order_id) AS CLV \
+                    FROM purchases \
+                    GROUP BY customer_id;"
+  }
+  {
+    "input_text": "Truncate timestamp data to the nearest month and calculate aggregate statistics.",
+    "output_text": "SELECT DATE_TRUNC('month', timestamp_column) AS month_start, \
+                    COUNT(*) AS num_events, \
+                    SUM(value) AS total_value, \
+                    AVG(value) AS average_value \
+                    FROM dataset \
+                    GROUP BY month_start;"
+  }
+  {
+    "input_text": "Bucket user engagement data into time intervals and calculate average session duration.",
+    "output_text": "SELECT DATE_TRUNC('hour', event_timestamp) AS hour_interval, \
+                    AVG(session_duration) AS average_session_duration \
+                    FROM user_engagement_data \
+                    GROUP BY hour_interval;"
+  }
+  {
+    "input_text": "Build a logistic regression model to predict customer churn based on historical data.",
+    "output_text": "SELECT * \
+                    FROM logistic_regression_model \
+                    WHERE probability_of_churn > 0.5;"
+  }
+  {
+    "input_text": "Extract specific elements from nested JSONB structures and perform analysis.",
+    "output_text": "SELECT data->>'field1' AS field1, \
+                    jsonb_array_elements(data->'field2'->'nested_array') AS nested_array_element \
+                    FROM jsonb_data;"
+  }
+  {
+    "input_text": "Find all points within a certain distance from a specific location using spatial buffering.",
+    "output_text": "SELECT point_id, point_location \
+                    FROM spatial_data \
+                    WHERE ST_DWithin(point_location, ST_POINT(-73.935242, 40.730610), 1000);"
+  }
+  {
+    "input_text": "Smooth time series data using exponential smoothing.",
+    "output_text": "SELECT timestamp, value, \
+                    EXP_SMOOTH(value, 0.5) AS smoothed_value \
+                    FROM time_series_data;"
+  }
+  {
+    "input_text": "Perform TF-IDF vectorization on text data for sentiment analysis.",
+    "output_text": "SELECT text_column, TFIDF_VECTORIZE(text_column) AS tfidf_vector \
+                    FROM text_data;"
+  }
+  {
+    "input_text": "Fill missing values in a dataset using K-Nearest Neighbors imputation.",
+    "output_text": "SELECT column1, \
+                    CASE \
+                      WHEN column2 IS NULL THEN ImputeKNN(column1) \
+                      ELSE column2 \
+                    END AS column2 \
+                    FROM dataset;"
+  }
+                                                                                                         
