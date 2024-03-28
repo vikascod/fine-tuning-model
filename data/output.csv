@@ -1,0 +1,11 @@
+input_text,output_text
+Find all customers from California.,SELECT * FROM customers WHERE state = 'California';
+"Show orders placed after January 1st, 2024.",SELECT * FROM orders WHERE order_date > '2024-01-01';
+List products by price from highest to lowest.,SELECT * FROM products ORDER BY price DESC;
+What is the total number of employees?,SELECT COUNT(*) FROM employees;
+Find all customer orders with their order details.,"SELECT c.name, o.order_id, od.product_id FROM customers c JOIN orders o ON c.customer_id = o.customer_id JOIN order_details od ON o.order_id = od.order_id;"
+Give me a list of all cities in the 'users' table.,SELECT DISTINCT city FROM users;
+Find all blog posts written by 'John' in the last month.,"SELECT * FROM posts WHERE author = 'John' AND post_date > DATE_SUB(CURDATE(), INTERVAL 1 MONTH);"
+What is the average rating for the product with ID 123?,SELECT AVG(rating) FROM reviews WHERE product_id = 123;
+Update the email address for customer ID 5 to 'new_email@example.com'.,UPDATE customers SET email = 'new_email@example.com' WHERE customer_id = 5;
+"Delete all orders placed before January 1st, 2023.",DELETE FROM orders WHERE order_date < '2023-01-01';
